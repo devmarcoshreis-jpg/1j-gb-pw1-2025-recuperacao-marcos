@@ -20,18 +20,27 @@ html{
    text-align: center;
    }
 form{
+   border-radius: 20px;
    height: 480px;
-   padding: 8px;
+   padding: 16px;
    width: 530px;
    margin-inline: auto;
    background-color: antiquewhite;
    }
+
 .inpt{
-   min-width: 90%;
-}
-input{
    font-size: 30px;
    height: 40px;
+   min-width: 90%;
+}
+#jogador{
+   height: 100px;
+   width: 100px;
+   margin-bottom: 20px;
+}
+.info{
+   text-align: left;
+   font-size: 28px;
 }
 
 main{
@@ -65,7 +74,7 @@ footer{
     100% { transform: translateY(0); }
    }
 
-.plyNow button{
+button{
    font-size: 40px;
    padding-inline: 50px;
    padding-block: 20px;

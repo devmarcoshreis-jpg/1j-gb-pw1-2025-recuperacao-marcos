@@ -40,14 +40,18 @@
           Idade:
           <input type="number" name="idade" class="inpt">
         </div>
-        <div>
-          Sexo:
+        <div class="info">
+          Gênero:
+          <br>
           <input type="radio" name="sexo" value="m"> Masculino
           <input type="radio" name="sexo" value="f"> Feminino
           <input type="radio" name="sexo" value="ni" checked> Não informar
         </div>
+        <div class="userProfile">
+          <img id="jogador" src="./assets/images/desconhecido.png" alt="Foto de Perfil">
+        </div>
         <div>
-          <button type="submit" name="botao">Cadastrar</button>
+          <button type="submit" name="botao" >Cadastrar</button>
         </div>       
       </form>
     </main>
@@ -59,20 +63,39 @@
   </body>
 
   <script>
-  const form = document.querySelector('form');
+const sexo = document.querySelectorAll('input[name="sexo"]');
+const perfil = document.querySelector('#jogador');
 
-  form.addEventListener('submit', (cadastro) => {
-    cadastro.preventDefault();
+sexo.forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (radio.value === 'm') {
+      perfil.src = './assets/images/usuario.png';
+    } else if (radio.value === 'f') {
+      perfil.src = './assets/images/usuaria.png';
+    } else {
+      perfil.src = './assets/images/desconhecido.png';
+    }
+  });
+});
 
-    const usuario = {
-      nome: form.elements['nome'].value,
-      idade: form.elements['idade'].value,
-      sexo: form.elements['sexo'].value
-    };
-    });
-    localStorage.setItem("nome", form.elements['nome'].value);
-    localStorage.setItem("idade", form.elements['idade'].value);
-    localStorage.setItem("sexo", form.elements['sexo'].value);
+const form = document.querySelector('form');
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const usuario = {
+    nome: form.elements['nome'].value,
+    idade: form.elements['idade'].value,
+    sexo: form.querySelector('input[name="sexo"]:checked').value
+  };
+
+  sessionStorage.setItem("nome", usuario.nome);
+  sessionStorage.setItem("idade", usuario.idade);
+  sessionStorage.setItem("sexo", usuario.sexo);
+
+  window.location.href = 'jokenpo.html';
+});
+
 </script>
 
   
