@@ -4,24 +4,220 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jo-ken-po</title>
+     <link rel="stylesheet" href="./css/styles.css">
+     <style>
+      table {
+      margin: 0 auto;
+      font-size: x-large;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      width: fit-content;
+      border: 2px solid #0f0f0f;
+    }
+
+    th {
+      background-color: #0049b8;
+    }
+
+    td {
+      width: fit-content;
+      background-color: #0061f3;
+    }
+    .conteudo img{
+      height: 150px;
+      width: auto;
+    }
+    .conteudo .maquinaEscolha img,.suaEscolha img{
+      height: 100px;
+    }
+    main{
+      height: auto;
+    }
+    .roboImg img{
+      background-color: #71cbff;
+      border-radius: 16px;
+      padding: 16px;
+      height: 180px;
+      width: auto;
+    }
+    .sairDoJogo{
+      margin-block: 24px;
+      color: aliceblue;
+      background-color: #d31d1d;
+    }
+    .jogar{
+
+      padding-block: 10px;
+      font-size: 30px;
+    }
+     </style>
   </head>
-  <body>
+<body>
     <header>
-
+      <h1 class="destacar">Pontuação: <span id="pontuacaoAtual">0</span></h1>
     </header>
+
     <main>
+      <div class="conteudo">
 
+        <div class="roboImg">
+          <h1 id="resultadoTitulo">Resultado:</h1>
+            <img id="maquinaImg" src="./assets/images/robo.png" alt="">
+        </div>
+        
+        <div id="maquinaJogada" class="maquinaEscolha">
+          <img id="imgMaquina" class="formatacao" src="./assets/images/variavel.png" alt="">
+        </div>
+
+        <img src="./assets/images/vs.png" alt="Contra" style="width: auto;height: 50px;">
+          
+        <div id="jogadaJogador" class="suaEscolha">
+          <img id="imgJogador" class="formatacao" src="./assets/images/variavel.png" alt="">
+        </div>
+
+      </div>
+
+      <h2>Escolha uma opção:</h2>
+
+      <div class="escolha">
+
+        <img class="opcoes formatacao" src="./assets/images/pedra.png" alt="Pedra">
+        <img class="opcoes formatacao" src="./assets/images/papel.png" alt="Papel">
+        <img class="opcoes formatacao" src="./assets/images/tesoura.png" alt="Tesoura">
+
+        <button class="jogadaJogador" data-jogada="pedra">Pedra</button>
+        <button class="jogadaJogador" data-jogada="papel">Papel</button>
+        <button class="jogadaJogador" data-jogada="tesoura">Tesoura</button>
+      </div>
+
+      <button class="jogar"> Jo-ken-po!</button>
+      
+     <h2>&#9660;&#9660;Ranking de Jogadores &#9660;&#9660;</h2>
+      <table id="tabelaRanking">
+          <thead>
+              <tr>
+                  <th>Pontos</th>
+                  <th>Nome</th>
+                  <th>Idade</th>
+                  <th>Sexo</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table>      
+
+    <button class="sairDoJogo" onclick="window.location.href='index.html'">Sair do Jogo</button>
+      <footer>
+         <div class="moreInfo">
+          Espero que possa se divertir com esse pequeno projeto :)
+          <br>
+          Desenvolvido por Marcos Reis — 2025
+          <br>
+          Ícones e imagens por <a href="https://www.flaticon.com/br/">FlatIcons</a> — Uso educacional
+          <br>
+          Contato: <a href="mailto:dev.marcos.h.reis@gmail.com">dev.marcos.h.reis@gmail.com</a>
+        </div>
+      </footer>
     </main>
-    <footer>
 
-    </footer>
     <script>
-      const nome = sessionStorage.getItem("nome");
-      const idade = sessionStorage.getItem("idade");
-      const sexo = sessionStorage.getItem("sexo");
+      const opcoes = ["pedra","papel","tesoura"];
+      
+      let jogadores = JSON.parse(sessionStorage.getItem("jogadores")) || [];
+      jogadores.forEach(j => {
+        if (j.pontos === undefined) j.pontos = 0;
+      });
+      sessionStorage.setItem("jogadores", JSON.stringify(jogadores));
 
-      console.log(nome, idade, sexo);
+      let jogadorAtual = jogadores[jogadores.length - 1];
+  
+      document.getElementById("pontuacaoAtual").textContent = jogadorAtual.pontos;
 
+      let escolhaJogador = null;
+
+      function imagemSexo(valor) {
+        if (valor === "m") return "./assets/images/usuario.png";
+        if (valor === "f") return "./assets/images/usuaria.png";
+        return "./assets/images/desconhecido.png";
+      }
+
+      function verifResultado(jogadaJogador,jogadaMaquina){
+        if(jogadaJogador === jogadaMaquina) return "empate";
+        if(
+          (jogadaJogador === "pedra" && jogadaMaquina ==="tesoura")||
+          (jogadaJogador === "papel" && jogadaMaquina ==="pedra")||
+          (jogadaJogador === "tesoura" && jogadaMaquina ==="papel")
+        ) return "jogador";
+
+        return "maquina";
+      }
+
+      function atualizarImagem(jogada, elementoID) {
+          document.getElementById(elementoID).src = `./assets/images/${jogada}.png`;
+      }
+
+      document.querySelectorAll(".jogadaJogador").forEach(botao => {
+          botao.addEventListener("click", () => {
+
+              escolhaJogador = botao.dataset.jogada;
+
+              atualizarImagem(escolhaJogador, "imgJogador");
+          });
+      });
+
+      document.querySelector(".jogar").addEventListener("click", () => {
+
+        if(!escolhaJogador) {
+          alert("Escolha uma opção primeiro!");
+          return;
+        }
+        const jogadaMaquina = opcoes[Math.floor(Math.random() * 3)];
+        atualizarImagem(jogadaMaquina, "imgMaquina");
+        const resultado = verifResultado(escolhaJogador, jogadaMaquina);
+const titulo = document.getElementById("resultadoTitulo");
+
+if (resultado === "jogador") {
+    titulo.innerHTML = "Você ganhou!";
+    maquinaImg.src = "./assets/images/roboPerde.png";
+    jogadorAtual.pontos++;
+    document.getElementById("pontuacaoAtual").textContent = jogadorAtual.pontos;
+}
+else if (resultado === "maquina") {
+    titulo.innerHTML = "A máquina ganhou!";
+    maquinaImg.src = "./assets/images/roboGanha.png";
+}
+else {
+    titulo.innerHTML = "Empate!";
+    maquinaImg.src = "./assets/images/roboSorriso.png";
+}
+
+
+        sessionStorage.setItem("jogadores", JSON.stringify(jogadores));
+        atualizarRanking();
+      });
+
+      const tabela = document.querySelector("#tabelaRanking tbody");
+
+      function atualizarRanking() {
+        tabela.innerHTML = "";
+
+        jogadores
+          .sort((a,b) => b.pontos - a.pontos)
+          .forEach(jogador => {
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${jogador.pontos}</td>
+                <td>${jogador.nome}</td>
+                <td>${jogador.idade}</td>
+                <td><img src="${imagemSexo(jogador.sexo)}" width="50"></td>
+            `;
+            tabela.appendChild(tr);
+        });
+      }
+
+      atualizarRanking();
     </script>
-  </body>
+</body>
 </html>

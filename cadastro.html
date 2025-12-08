@@ -6,13 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jokenpo!</title>
     <link rel="stylesheet" href="./css/styles.css">
-    <style>
-       
-    </style>
   </head>
   <body>
     <header>
-      <h1>Seja Bem-vindo Jogador!</h1>
+      <h1 class="destacar">Seja Bem-vindo Jogador!</h1>
     </header>
     <main>
         <div class="cadastro">
@@ -30,7 +27,7 @@
           </h1>
         </div>
      
-      <h3>Registre-se agora!</h3>
+      <h2>Registre-se agora!</h2>
       <form>
         <div class="info">
           Nome:
@@ -48,7 +45,7 @@
           <input type="radio" name="sexo" value="ni" checked> Não informar
         </div>
         <div class="userProfile">
-          <img id="jogador" src="./assets/images/desconhecido.png" alt="Foto de Perfil">
+          <img id="jogador"  class="formatacao" src="./assets/images/desconhecido.png" alt="Foto de Perfil">
         </div>
         <div>
           <button type="submit" name="botao" >Cadastrar</button>
@@ -56,47 +53,57 @@
       </form>
     </main>
     <footer>
-      <p>
-        jkdfsas
-      </p>
+         <div class="moreInfo">
+          Espero que possa se divertir com esse pequeno projeto :)
+          <br>
+          Desenvolvido por Marcos Reis — 2025
+          <br>
+          Ícones e imagens por <a href="https://www.flaticon.com/br/">FlatIcons</a> — Uso educacional
+          <br>
+          Contato: <a href="mailto:dev.marcos.h.reis@gmail.com">dev.marcos.h.reis@gmail.com</a>
+        </div>
     </footer>
-  </body>
-
   <script>
-const sexo = document.querySelectorAll('input[name="sexo"]');
-const perfil = document.querySelector('#jogador');
 
-sexo.forEach(radio => {
-  radio.addEventListener('change', () => {
-    if (radio.value === 'm') {
-      perfil.src = './assets/images/usuario.png';
-    } else if (radio.value === 'f') {
-      perfil.src = './assets/images/usuaria.png';
-    } else {
-      perfil.src = './assets/images/desconhecido.png';
-    }
-  });
-});
+    const botao = document.getElementsByName ('botao')[0];
+    const nome = document.getElementsByName ('nome')[0];
+    const idade = document.getElementsByName('idade')[0];
+    const perfil = document.querySelector('#jogador');
+    const sexo = document.querySelectorAll('input[name="sexo"]');
 
-const form = document.querySelector('form');
+    sexo.forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'm') {
+          perfil.src = './assets/images/usuario.png';
+        } else if (radio.value === 'f') {
+          perfil.src = './assets/images/usuaria.png';
+        } else {
+          perfil.src = './assets/images/desconhecido.png';
+        }
+      });
+    });
+    
+    const form = document.querySelector('form');
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
 
-  const usuario = {
-    nome: form.elements['nome'].value,
-    idade: form.elements['idade'].value,
-    sexo: form.querySelector('input[name="sexo"]:checked').value
-  };
+      if(nome.value.trim()===''||idade.value ===''|| isNaN(Number(idade.value))){
+        alert("Preencha todos os campos para poder continuar!")
+        return;
+      } 
 
-  sessionStorage.setItem("nome", usuario.nome);
-  sessionStorage.setItem("idade", usuario.idade);
-  sessionStorage.setItem("sexo", usuario.sexo);
+      const usuario = {
+        nome: form.elements['nome'].value,
+        idade: form.elements['idade'].value,
+        sexo: form.querySelector('input[name="sexo"]:checked').value
+      };
+      
+      let lista = JSON.parse(sessionStorage.getItem("jogadores")) || [];
 
-  window.location.href = 'jokenpo.html';
-});
-
+      lista.push(usuario);
+      sessionStorage.setItem("jogadores", JSON.stringify(lista));
+      window.location.href = 'jokenpo.html';
+    });
 </script>
-
-  
 </html> 
